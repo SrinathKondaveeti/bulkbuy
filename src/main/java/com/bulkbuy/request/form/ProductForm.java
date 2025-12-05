@@ -1,9 +1,11 @@
-package com.bulkbuy.response;
+package com.bulkbuy.request.form;
+
+import com.bulkbuy.response.ProductMediaData;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class ProductData {
+public class ProductForm {
 
     private Long productId;
     private String name;

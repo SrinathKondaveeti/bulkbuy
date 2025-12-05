@@ -2,7 +2,7 @@ package com.bulkbuy.response;
 
 import java.util.List;
 
-public class MediaData {
+public class ProductMediaData {
 
     private String logo;
 

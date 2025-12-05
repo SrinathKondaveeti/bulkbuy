@@ -1,19 +1,36 @@
-package com.bulkbuy.response;
+package com.bulkbuy.entity;
+
+
+import jakarta.persistence.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class ProductData {
+@Entity
+@Table(name = "products")
+public class ProductEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
+
     private String name;
+
     private String description;
-    private ProductMediaData productMediaData;
+
+    @Embedded
+    private ProductMedia productMedia;
+
     private int ordersRequired;
+
     private int ordersPlaced;
+
     private LocalDateTime orderCutOffDate;
+
     private double actualPrice;
+
     private double offerPrice;
+
     private LocalDateTime productLiveTime;
 
     public Long getProductId() {
@@ -40,12 +57,12 @@ public class ProductData {
         this.description = description;
     }
 
-    public ProductMediaData getProductMediaData() {
-        return productMediaData;
+    public ProductMedia getProductMedia() {
+        return productMedia;
     }
 
-    public void setProductMediaData(ProductMediaData productMediaData) {
-        this.productMediaData = productMediaData;
+    public void setProductMedia(ProductMedia productMedia) {
+        this.productMedia = productMedia;
     }
 
     public int getOrdersRequired() {

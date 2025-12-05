@@ -1,10 +1,11 @@
 package com.bulkbuy.controller;
 
+import com.bulkbuy.request.form.ProductForm;
 import com.bulkbuy.response.ProductData;
+import com.bulkbuy.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -12,10 +13,16 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductsController {
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("/allProducts")
     public ResponseEntity<List<ProductData>> getAllProducts() {
-
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+    @PostMapping("/create")
+    public ResponseEntity<List<ProductData>> createProduct(@RequestBody List<ProductForm> productsListForm){
+        return ResponseEntity.ok(productService.createProducts(productsListForm));
     }
 
 }
