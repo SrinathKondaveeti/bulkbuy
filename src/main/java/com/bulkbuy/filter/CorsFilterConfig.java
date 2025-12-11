@@ -14,44 +14,44 @@ import java.util.Arrays;
 @Configuration
 public class CorsFilterConfig {
 
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        System.out.println("$$$$$$$$ CorsFilter executed $$$$$$$$");
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("https://srinathkondaveeti.github.io/bulkly"); // or config.addAllowedOriginPattern("*");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//
-//        return new CorsFilter(source);
-//    }
+    @Bean
+    public CorsFilter corsFilter() {
+        System.out.println("$$$$$$$$ CorsFilter executed $$$$$$$$");
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("https://srinathkondaveeti.github.io"); // or config.addAllowedOriginPattern("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
 
-//    @Bean
-//    public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
-//        System.out.println("$$$$$$$$ CorsFilter executed $$$$$$$$");
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("https://srinathkondaveeti.github.io/bulkly");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//
-//        CorsFilter corsFilter = new CorsFilter(source);
-//        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(corsFilter);
-//        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-//        return bean;
-//    }
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
+    }
+
+    @Bean
+    public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
+        System.out.println("$$$$$$$$ FilterRegistrationBean executed $$$$$$$$");
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("https://srinathkondaveeti.github.io");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        CorsFilter corsFilter = new CorsFilter(source);
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(corsFilter);
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return bean;
+    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         System.out.println("@#$$$$$$$$$$$$$$$$$$ SecurityConfig CorsConfiguration entered $$$$$$$$$$$$$$$$$$$$$$$#@");
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://srinathkondaveeti.github.io/bulkly"));
+        configuration.setAllowedOrigins(Arrays.asList("https://srinathkondaveeti.github.io"));
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         //configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
