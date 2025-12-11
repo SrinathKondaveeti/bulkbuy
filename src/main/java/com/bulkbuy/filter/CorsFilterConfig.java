@@ -35,6 +35,8 @@ public class CorsFilterConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("https://srinathkondaveeti.github.io");
+        //config.addAllowedOrigin("http://localhost:4200");
+
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
