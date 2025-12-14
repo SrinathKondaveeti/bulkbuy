@@ -10,24 +10,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class CorsFilterConfig {
 
-    @Bean
-    public CorsFilter corsFilter() {
-        System.out.println("$$$$$$$$ CorsFilter executed $$$$$$$$");
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:4200"); // or config.addAllowedOriginPattern("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return new CorsFilter(source);
-    }
 
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
@@ -35,7 +22,11 @@ public class CorsFilterConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         //config.addAllowedOrigin("https://srinathkondaveeti.github.io");
-        config.addAllowedOrigin("http://localhost:4200");
+        //config.addAllowedOrigin("http://localhost:4200");
+        config.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "https://srinathkondaveeti.github.io"
+        ));
 
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
@@ -49,21 +40,5 @@ public class CorsFilterConfig {
         return bean;
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        System.out.println("@#$$$$$$$$$$$$$$$$$$ SecurityConfig CorsConfiguration entered $$$$$$$$$$$$$$$$$$$$$$$#@");
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        //configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L); // How long the pre-flight request can be cached
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 
 }
