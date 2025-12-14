@@ -8,6 +8,7 @@ import com.bulkbuy.response.ProductMediaData;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ProductEntityPopulator {
@@ -24,6 +25,7 @@ public class ProductEntityPopulator {
         productData.setActualPrice(productEntity.getActualPrice());
         productData.setOfferPrice(productEntity.getOfferPrice());
         productData.setProductLiveTime(productEntity.getProductLiveTime());
+        productData.setInterestedPeopleCount((productEntity.getInterestedPeopleCount() != null) ?productEntity.getInterestedPeopleCount().intValue():0);
 
         if (productEntity.getProductMedia() != null) {
 
@@ -52,6 +54,7 @@ public class ProductEntityPopulator {
         productEntity.setActualPrice(productForm.getActualPrice());
         productEntity.setOfferPrice(productForm.getOfferPrice());
         productEntity.setProductLiveTime(productForm.getProductLiveTime());
+        productEntity.setInterestedPeopleCount(productForm.getInterestedPeopleCount());
 
         if (productForm.getProductMediaData() != null) {
 

@@ -15,6 +15,15 @@ public class ProductData {
     private double actualPrice;
     private double offerPrice;
     private LocalDateTime productLiveTime;
+    private int interestedPeopleCount;
+
+    public int getInterestedPeopleCount() {
+        return interestedPeopleCount;
+    }
+
+    public void setInterestedPeopleCount(int interestedPeopleCount) {
+        this.interestedPeopleCount = interestedPeopleCount;
+    }
 
     public Long getProductId() {
         return productId;

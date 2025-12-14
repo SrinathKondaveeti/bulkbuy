@@ -33,6 +33,16 @@ public class ProductEntity {
 
     private LocalDateTime productLiveTime;
 
+    private Integer interestedPeopleCount = 0;
+
+    public Integer getInterestedPeopleCount() {
+        return interestedPeopleCount;
+    }
+
+    public void setInterestedPeopleCount(Integer interestedPeopleCount) {
+        this.interestedPeopleCount = interestedPeopleCount;
+    }
+
     public Long getProductId() {
         return productId;
     }
