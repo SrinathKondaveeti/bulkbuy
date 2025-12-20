@@ -28,8 +28,8 @@ public class BulkBuyUsersController {
     }
 
     @PostMapping("/isMobileNumberAvailable")
-    public ResponseEntity<Boolean> isEmailAvailable(@RequestBody MobileNumberVerificationRequest mobileNumber) {
-        return ResponseEntity.ok(userService.isMobileNumberAvailable(mobileNumber.getMobileNumber()));
+    public ResponseEntity<Boolean> isMobileNumberRegistered(@RequestBody MobileNumberVerificationRequest mobileNumber) {
+        return ResponseEntity.ok(userService.isMobileNumberRegistered(mobileNumber.getMobileNumber()));
     }
 
     @PostMapping("/register")

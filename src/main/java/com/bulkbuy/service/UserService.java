@@ -55,11 +55,11 @@ public class UserService {
             "User created successfully with the email.";
 
     public boolean isEmailIdRegistered(String emailId){
-        return !usersRepository.existsByEmailId(emailId);
+        return usersRepository.existsByEmailId(emailId);
     }
 
-    public Boolean isMobileNumberAvailable(String mobileNumber) {
-        return !usersRepository.existsByMobileNumber(mobileNumber);
+    public Boolean isMobileNumberRegistered(String mobileNumber) {
+        return usersRepository.existsByMobileNumber(mobileNumber);
     }
 
     public UserRegistrationProcessResponseData sendEmailVerificationCode(String emailId) {
@@ -68,7 +68,7 @@ public class UserService {
         UserRegistrationProcessResponseData userRegistrationProcessResponseData = null;
 
         if (isEmailIdRegistered(emailId)) {
-            userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER001", EMAIL_EXISTS, 0, 0,null, byMailId.getEmail(), null);
+            userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER001", EMAIL_EXISTS, 0, 0,null, emailId, null);
         } else if (!verificationService.isEmailVerificationCodeCreated(byMailId)) {
             byMailId = verificationService.createVerificationCodeForEmail(emailId);
             userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("SU001", VERIFICATION_CODE_SENT, byMailId.getResendAttemptsLeft(), byMailId.getVerificationAttemptsLeft() , byMailId.getValidUntil(), byMailId.getEmail(), null);
@@ -92,7 +92,7 @@ public class UserService {
         VerificationEntity byMailId = verificationService.getByMailId(userRegistrationForm.getEmail());
         UserRegistrationProcessResponseData userRegistrationProcessResponseData = null;
 
-        if (isMobileNumberAvailable(userRegistrationForm.getMobileNumber())) {
+        if (isMobileNumberRegistered(userRegistrationForm.getMobileNumber())) {
             userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER004", MOBILE_NUMBER_EXISTS, 0,0, null, userRegistrationForm.getEmail(), userRegistrationForm.getMobileNumber());
         } else if (isEmailIdRegistered(userRegistrationForm.getEmail())) {
             userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER001", EMAIL_EXISTS, 0,0, null, userRegistrationForm.getEmail(), userRegistrationForm.getMobileNumber());
