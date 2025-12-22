@@ -27,33 +27,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("@#$$$$$$$$$$$$$$$$$$ JwtAuthenticationFilter entered $$$$$$$$$$$$$$$$$$$$$$$#@");
-        System.out.println("@#$$$$$$$$$$$$$$$$$$ JwtAuthenticationFilter URL $$$$$$$$$$$$$$$$$$$$$$$#@" + request.getRequestURI());
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("@#$$$$$$$$$$$$$$$$$$ Authorization header not available $$$$$$$$$$$$$$$$$$$$$$$#@");
             filterChain.doFilter(request, response);
             return;
         }
-
-        System.out.println("@#$$$$$$$$$$$$$$$$$$ Authorization header available $$$$$$$$$$$$$$$$$$$$$$$#@");
-
         jwt = authHeader.substring(7);
         username = jwtService.extractUsername(jwt);
-        System.out.println("@#$$$$$$$$$$$$$$$$$$ User Name $$$$$$$$$$$$$$$$$$$$$$$#@+"+username);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            System.out.println("@#$$$$$$$$$$$$$$$$$$ User getPassword $$$$$$$$$$$$$$$$$$$$$$$#@+"+userDetails.getPassword());
-
-
             if (jwtService.validateToken(jwt, userDetails)) {
-                System.out.println("@#$$$$$$$$$$$$$$$$$$ Token Valid $$$$$$$$$$$$$$$$$$$$$$$#@+");
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -64,10 +53,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-            }else{
-
-                System.out.println("@#$$$$$$$$$$$$$$$$$$ Token In Valid $$$$$$$$$$$$$$$$$$$$$$$#@+");
-
             }
         }
         filterChain.doFilter(request, response);
