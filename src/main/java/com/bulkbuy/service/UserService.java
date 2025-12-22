@@ -4,9 +4,19 @@ import com.bulkbuy.entity.BulkBuyUserEntity;
 import com.bulkbuy.entity.VerificationEntity;
 import com.bulkbuy.populator.UserEntityPopulator;
 import com.bulkbuy.repository.UsersRepository;
+import com.bulkbuy.request.form.UserLoginForm;
 import com.bulkbuy.request.form.UserRegistrationForm;
+import com.bulkbuy.response.AuthResponse;
 import com.bulkbuy.response.UserRegistrationProcessResponseData;
+import com.bulkbuy.security.service.BulkBuyUserDetailsService;
+import com.bulkbuy.security.service.JwtService;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -26,6 +36,15 @@ public class UserService {
 
     @Autowired
     private UserEntityPopulator userEntityPopulator;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private BulkBuyUserDetailsService bulkBuyUserDetailsService;
 
     private static final String EMAIL_EXISTS =
             "Email already exists. Please use a different email or reset your password using 'Forgot Password'.";
@@ -122,4 +141,27 @@ public class UserService {
         return userRegistrationProcessResponseData;
     }
 
+    public @Nullable AuthResponse authenticateUser(UserLoginForm userLoginForm) {
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userLoginForm.getEmailOrMobileNumber(),
+                            userLoginForm.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            throw new IllegalArgumentException("Invalid username or password."); // Generic error message
+        }
+
+        UserDetails userDetails = bulkBuyUserDetailsService.loadUserByUsername(userLoginForm.getEmailOrMobileNumber());
+        var jwtToken = jwtService.generateToken(userDetails);
+        var refreshToken = jwtService.generateRefreshToken(userDetails);
+
+        return new AuthResponse(
+                jwtToken,
+                refreshToken,
+                "Login successful!"
+        );
+    }
 }

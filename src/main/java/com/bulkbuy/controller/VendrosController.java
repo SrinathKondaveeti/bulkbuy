@@ -1,6 +1,7 @@
 package com.bulkbuy.controller;
 
 import com.bulkbuy.request.form.ProductForm;
+import com.bulkbuy.request.form.VendorRegistrationForm;
 import com.bulkbuy.response.ProductData;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +15,9 @@ import java.util.List;
 @RequestMapping("/vendor")
 public class VendrosController {
 
-    @PostMapping("/create")
-    public ResponseEntity<String> createVendor(@RequestBody List<ProductForm> productsListForm){
+    @PostMapping("/register")
+    public ResponseEntity<String> createVendor(@RequestBody VendorRegistrationForm vendorRegistrationForm){
+
         return ResponseEntity.ok("");
     }
 

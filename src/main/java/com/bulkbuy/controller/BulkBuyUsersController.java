@@ -3,7 +3,9 @@ package com.bulkbuy.controller;
 import com.bulkbuy.entity.BulkBuyUserEntity;
 import com.bulkbuy.request.EmailVerificationRequest;
 import com.bulkbuy.request.MobileNumberVerificationRequest;
+import com.bulkbuy.request.form.UserLoginForm;
 import com.bulkbuy.request.form.UserRegistrationForm;
+import com.bulkbuy.response.AuthResponse;
 import com.bulkbuy.response.UserRegistrationProcessResponseData;
 import com.bulkbuy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +39,9 @@ public class BulkBuyUsersController {
         return ResponseEntity.ok(userService.registerUser(userRegistrationForm));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> authenticateUser(@RequestBody UserLoginForm userLoginForm) {
+        return ResponseEntity.ok(userService.authenticateUser(userLoginForm));
+    }
 
 }
