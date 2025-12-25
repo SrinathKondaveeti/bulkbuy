@@ -51,6 +51,8 @@ public class SecurityConfig {
                         .requestMatchers("/user/isMobileNumberAvailable").permitAll()
                         .requestMatchers("/user/register").permitAll()
                         .requestMatchers("/user/login").permitAll()
+                        .requestMatchers("/user/forgotPassword/sendEmailVerificationCode").permitAll()
+                        .requestMatchers("/user/forgotPassword/resetPassword").permitAll()
                         .requestMatchers("/product/allProducts").permitAll()
                         .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
 //                                .requestMatchers("/task/updateTaskStatus/**").hasAnyRole("C_U_TSKS", "AP_ADMIN")

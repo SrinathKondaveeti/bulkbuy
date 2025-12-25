@@ -3,6 +3,7 @@ package com.bulkbuy.controller;
 import com.bulkbuy.entity.BulkBuyUserEntity;
 import com.bulkbuy.request.EmailVerificationRequest;
 import com.bulkbuy.request.MobileNumberVerificationRequest;
+import com.bulkbuy.request.form.ForgotPasswordForm;
 import com.bulkbuy.request.form.UserLoginForm;
 import com.bulkbuy.request.form.UserRegistrationForm;
 import com.bulkbuy.response.AuthResponse;
@@ -19,10 +20,6 @@ public class BulkBuyUsersController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/sendEmailVerificationCode")
-    public ResponseEntity<UserRegistrationProcessResponseData> sendEmailVerificationCode(@RequestBody EmailVerificationRequest emailId) {
-        return ResponseEntity.ok(userService.sendEmailVerificationCode(emailId.getEmailId()));
-    }
 
     @PostMapping("/isEmailAvailable")
     public ResponseEntity<Boolean> isEmailIdRegistered(@RequestBody EmailVerificationRequest emailId) {
@@ -34,6 +31,11 @@ public class BulkBuyUsersController {
         return ResponseEntity.ok(userService.isMobileNumberRegistered(mobileNumber.getMobileNumber()));
     }
 
+    @PostMapping("/sendEmailVerificationCode")
+    public ResponseEntity<UserRegistrationProcessResponseData> sendEmailVerificationCode(@RequestBody EmailVerificationRequest emailId) {
+        return ResponseEntity.ok(userService.sendEmailVerificationCode(emailId.getEmailId()));
+    }
+
     @PostMapping("/register")
     public ResponseEntity<UserRegistrationProcessResponseData> registerUser(@RequestBody UserRegistrationForm userRegistrationForm) {
         return ResponseEntity.ok(userService.registerUser(userRegistrationForm));
@@ -42,6 +44,16 @@ public class BulkBuyUsersController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody UserLoginForm userLoginForm) {
         return ResponseEntity.ok(userService.authenticateUser(userLoginForm));
+    }
+
+    @PostMapping("/forgotPassword/sendEmailVerificationCode")
+    public ResponseEntity<UserRegistrationProcessResponseData> sendResetPasswordEmailVerificationCode(@RequestBody EmailVerificationRequest emailId) {
+        return ResponseEntity.ok(userService.sendResetPasswordEmailVerificationCode(emailId.getEmailId()));
+    }
+
+    @PostMapping("/forgotPassword/resetPassword")
+    public ResponseEntity<UserRegistrationProcessResponseData> forgotPassword(@RequestBody ForgotPasswordForm forgotPasswordForm) {
+        return ResponseEntity.ok(userService.updateUserPassword(forgotPasswordForm));
     }
 
 }

@@ -26,7 +26,7 @@ public class VerificationService {
         verificationEntity.setVerificationCode("999999");
         verificationEntity.setEmail(email);
         verificationEntity.setResendAttemptsLeft(4);
-        verificationEntity.setVerificationAttemptsLeft(4);
+        verificationEntity.setVerificationAttemptsLeft(5);
         verificationEntity.setValidUntil(LocalDateTime.now().plusMinutes(10));
         return verificationRepository.save(verificationEntity);
     }
@@ -52,7 +52,7 @@ public class VerificationService {
     }
 
     public VerificationEntity extendVerificationCodeExpiryForEmail(VerificationEntity byMailId) {
-        byMailId.setResendAttemptsLeft(5);
+        byMailId.setResendAttemptsLeft(4);
         byMailId.setVerificationAttemptsLeft(5);
         byMailId.setValidUntil(LocalDateTime.now().plusMinutes(10));
         return verificationRepository.save(byMailId);
