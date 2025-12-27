@@ -3,6 +3,7 @@ package com.bulkbuy.populator;
 import com.bulkbuy.entity.BulkBuyUserEntity;
 import com.bulkbuy.enums.UserTypeEnum;
 import com.bulkbuy.request.form.UserRegistrationForm;
+import com.bulkbuy.request.form.VendorRegistrationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,19 @@ public class UserEntityPopulator {
         bulkBuyUserEntity.setMailIdVerified(true);
         bulkBuyUserEntity.setPassword(passwordEncoder.encode(userRegistrationForm.getPassword()));
         bulkBuyUserEntity.setUserType(UserTypeEnum.CUSTOMER);
+        return bulkBuyUserEntity;
+
+    }
+
+    public BulkBuyUserEntity convertToEntity(VendorRegistrationForm vendorRegistrationForm) {
+
+        BulkBuyUserEntity bulkBuyUserEntity = new BulkBuyUserEntity();
+        bulkBuyUserEntity.setName(vendorRegistrationForm.getName());
+        bulkBuyUserEntity.setEmailId(vendorRegistrationForm.getEmail());
+        bulkBuyUserEntity.setMobileNumber(vendorRegistrationForm.getMobileNumber());
+        bulkBuyUserEntity.setMailIdVerified(true);
+        bulkBuyUserEntity.setPassword(passwordEncoder.encode(vendorRegistrationForm.getPassword()));
+        bulkBuyUserEntity.setUserType(UserTypeEnum.VENDOR);
         return bulkBuyUserEntity;
 
     }

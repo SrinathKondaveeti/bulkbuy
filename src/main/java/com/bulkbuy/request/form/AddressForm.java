@@ -5,6 +5,7 @@ public class AddressForm {
     private String doorNumber;
     private String buildName;
     private String streetName;
+    private String areaName;
     private String landMark;
     private String city;
     private String district;
@@ -34,6 +35,14 @@ public class AddressForm {
 
     public void setStreetName(String streetName) {
         this.streetName = streetName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public String getLandMark() {

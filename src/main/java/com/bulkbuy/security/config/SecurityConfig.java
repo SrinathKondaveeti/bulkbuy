@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/forgotPassword/sendEmailVerificationCode").permitAll()
                         .requestMatchers("/user/forgotPassword/resetPassword").permitAll()
                         .requestMatchers("/product/allProducts").permitAll()
+                        .requestMatchers("/vendor/register").permitAll()
                         .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
 //                                .requestMatchers("/task/updateTaskStatus/**").hasAnyRole("C_U_TSKS", "AP_ADMIN")
                                 .anyRequest().authenticated())

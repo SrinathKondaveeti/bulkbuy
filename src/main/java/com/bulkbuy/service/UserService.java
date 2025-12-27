@@ -7,6 +7,7 @@ import com.bulkbuy.repository.UsersRepository;
 import com.bulkbuy.request.form.ForgotPasswordForm;
 import com.bulkbuy.request.form.UserLoginForm;
 import com.bulkbuy.request.form.UserRegistrationForm;
+import com.bulkbuy.request.form.VendorRegistrationForm;
 import com.bulkbuy.response.AuthResponse;
 import com.bulkbuy.response.UserRegistrationProcessResponseData;
 import com.bulkbuy.security.service.BulkBuyUserDetailsService;
@@ -91,6 +92,10 @@ public class UserService {
 
     public Boolean isMobileNumberRegistered(String mobileNumber) {
         return usersRepository.existsByMobileNumber(mobileNumber);
+    }
+
+    public BulkBuyUserEntity getUserByEmail(String email){
+        return usersRepository.findByEmailId(email).get();
     }
 
     public UserRegistrationProcessResponseData sendEmailVerificationCode(String emailId) {
@@ -184,6 +189,46 @@ public class UserService {
             } else {
                 byMailId = verificationService.reduceVerificationCodeValidationAttemptsForEmail(byMailId);
                 userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER006", INVALID_VERIFICATION_CODE, byMailId.getResendAttemptsLeft(),byMailId.getVerificationAttemptsLeft() ,  byMailId.getValidUntil(), byMailId.getEmail(), userRegistrationForm.getMobileNumber());
+            }
+        }
+        return userRegistrationProcessResponseData;
+    }
+
+    public UserRegistrationProcessResponseData registerVendorUser(VendorRegistrationForm vendorRegistrationForm) {
+
+        UserRegistrationProcessResponseData userRegistrationProcessResponseData = null;
+
+        if (isMobileNumberRegistered(vendorRegistrationForm.getMobileNumber())) {
+            return new UserRegistrationProcessResponseData("ER004", MOBILE_NUMBER_EXISTS, 0,0, null, vendorRegistrationForm.getEmail(), vendorRegistrationForm.getMobileNumber());
+        }
+
+        if (isEmailIdRegistered(vendorRegistrationForm.getEmail())) {
+            return new UserRegistrationProcessResponseData("ER001", EMAIL_EXISTS, 0,0, null, vendorRegistrationForm.getEmail(), vendorRegistrationForm.getMobileNumber());
+        }
+
+        VerificationEntity byMailId = verificationService.getByMailId(vendorRegistrationForm.getEmail());
+
+        if (!verificationService.isEmailVerificationCodeCreated(byMailId)) {
+            byMailId = verificationService.createVerificationCodeForEmail(vendorRegistrationForm.getEmail());
+            userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("SU001", VERIFICATION_CODE_SENT, byMailId.getResendAttemptsLeft(), byMailId.getVerificationAttemptsLeft() , byMailId.getValidUntil(), byMailId.getEmail(), vendorRegistrationForm.getMobileNumber());
+            emailService.sendVerificationEmail(byMailId);
+        } else if (verificationService.isEmailVerificationCodeExpired(byMailId)) {
+            byMailId = verificationService.extendVerificationCodeExpiryForEmail(byMailId);
+            userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER003", TOKEN_EXPIRED_CREATE_NEW, byMailId.getResendAttemptsLeft(),byMailId.getVerificationAttemptsLeft() ,  byMailId.getValidUntil(), byMailId.getEmail(), vendorRegistrationForm.getMobileNumber());
+            emailService.sendVerificationEmail(byMailId);
+        } else if (verificationService.hasExceededEmailVerificationCodeResendAttempts(byMailId)) {
+            userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER002", RESEND_ATTEMPTS_COMPLETED, byMailId.getResendAttemptsLeft(),byMailId.getVerificationAttemptsLeft() ,  byMailId.getValidUntil(), byMailId.getEmail(), vendorRegistrationForm.getMobileNumber());
+        } else if (verificationService.hasExceededEmailVerificationCodeValidationAttempts(byMailId)) {
+            userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER005", VALIDATION_ATTEMPTS_COMPLETED, byMailId.getResendAttemptsLeft(),byMailId.getVerificationAttemptsLeft() ,  byMailId.getValidUntil(), byMailId.getEmail(), vendorRegistrationForm.getMobileNumber());
+        } else {
+            if (Objects.equals(vendorRegistrationForm.getEmailVerificationCode(), byMailId.getVerificationCode())) {
+                BulkBuyUserEntity bulkBuyUserEntity = userEntityPopulator.convertToEntity(vendorRegistrationForm);
+                usersRepository.save(bulkBuyUserEntity);
+                verificationService.removeVerificationCode(byMailId);
+                userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("SU003", USER_CREATED, byMailId.getResendAttemptsLeft(),byMailId.getVerificationAttemptsLeft() ,  byMailId.getValidUntil(), byMailId.getEmail(), vendorRegistrationForm.getMobileNumber());
+            } else {
+                byMailId = verificationService.reduceVerificationCodeValidationAttemptsForEmail(byMailId);
+                userRegistrationProcessResponseData = new UserRegistrationProcessResponseData("ER006", INVALID_VERIFICATION_CODE, byMailId.getResendAttemptsLeft(),byMailId.getVerificationAttemptsLeft() ,  byMailId.getValidUntil(), byMailId.getEmail(), vendorRegistrationForm.getMobileNumber());
             }
         }
         return userRegistrationProcessResponseData;
